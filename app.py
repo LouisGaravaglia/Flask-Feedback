@@ -1,8 +1,8 @@
 from flask import Flask, render_template, flash, redirect, render_template, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, Cupcake
+from models import db, connect_db, Pet
 from flask_cors import CORS
-
+from forms import AddUserForm
 
 
 
@@ -21,38 +21,81 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 
 
-@app.route("/")
-def show_home():
-    """Show homepage."""
-    
-    cupcakes = Cupcake.query.all()  
+# GET /
+#     Redirect to /register.
+# GET /register
 
-    return render_template("index.html", cupcakes=cupcakes)
+#     Show a form that when submitted will register/create a user. This form should accept a username, password, email, first_name, and last_name.
+
+#     Make sure you are using WTForms and that your password input hides the characters that the user is typing!
+# POST /register
+#     Process the registration form by adding a new user. Then redirect to /secret
+# GET /login
+
+#     Show a form that when submitted will login a user. This form should accept a username and a password.
+
+#     Make sure you are using WTForms and that your password input hides the characters that the user is typing!
+# POST /login
+#     Process the login form, ensuring the user is authenticated and going to /secret if so.
+# GET /secret
+#     Return the text “You made it!” (don’t worry, we’ll get rid of this soon) 
+    
+    
+# @app.route("/")
+# def show_home():
+#     """Show homepage."""
+    
+
+#     return render_template("index.html", cupcakes=cupcakes)
         
     
+@app.route("/register", methods=["GET", "POST"])
+def register_user():
+    """Show register user form; handle adding user."""
+
+    form = AddUserForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        species = form.species.data
+        photo = form.photo.data
+        age = form.age.data
+        notes = form.notes.data
+        available = form.available.data
+        
+        new_pet = Pet(name=name, species=species, photo=photo, age=age, notes=notes, available=available)
+        db.session.add(new_pet)
+        db.session.commit()
+        flash(f"Added {name} the {species}", "success")
+        return redirect("/register")
+
+    else:
+
+        return render_template(
+            "register.html", form=form)
 
     
 
 
 
 
-@app.route("/api/cupcakes")
-def get_all_cupcakes():
-    """Get all cupcakes."""
-    all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.all()]
+# @app.route("/api/cupcakes")
+# def get_all_cupcakes():
+#     """Get all cupcakes."""
+#     all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.all()]
     
 
-    return jsonify(cupcakes=all_cupcakes)
+#     return jsonify(cupcakes=all_cupcakes)
 
-@app.route("/api/cupcakes/<int:id>")
-def get_cupcake(id):
-    """Show single cupcake."""
-    cupcake = Cupcake.query.get_or_404(id)
-    return jsonify(cupcake=cupcake.serialize())
+# @app.route("/api/cupcakes/<int:id>")
+# def get_cupcake(id):
+#     """Show single cupcake."""
+#     cupcake = Cupcake.query.get_or_404(id)
+#     return jsonify(cupcake=cupcake.serialize())
   
-@app.route("/api/cupcakes", methods=["POST"])
-def post_a_cupcake():
-    """Show form to create a cupcake."""
+# @app.route("/api/cupcakes", methods=["POST"])
+# def post_a_cupcake():
+#     """Show form to create a cupcake."""
 
         
     # if not request.json["flavor"]:
@@ -66,41 +109,41 @@ def post_a_cupcake():
     #     cupcake = Cupcake(flavor=request.json["flavor"], size=request.json["size"], rating=request.json["rating"], image=request.json["image"])
     # else:
     #     cupcake = Cupcake(flavor=request.json["flavor"], size=request.json["size"], rating=request.json["rating"])
-    cupcake = Cupcake(flavor=request.json["flavor"], size=request.json["size"], rating=request.json["rating"], image=request.json["image"])
+#     cupcake = Cupcake(flavor=request.json["flavor"], size=request.json["size"], rating=request.json["rating"], image=request.json["image"])
 
-    db.session.add(cupcake)
-    db.session.commit()    
-    response_json = jsonify(cupcake=cupcake.serialize())
+#     db.session.add(cupcake)
+#     db.session.commit()    
+#     response_json = jsonify(cupcake=cupcake.serialize())
 
-    return (response_json, 201)  
-
-
-
-@app.route("/api/cupcakes/<int:id>", methods=["PATCH"])
-def patch_a_cupcake(id):
-    """Update an existing cupcake."""
-    cupcake = Cupcake.query.get_or_404(id)
-    cupcake.flavor=request.json.get("flavor", cupcake.flavor)
-    cupcake.size=request.json.get("size", cupcake.size)
-    cupcake.rating=request.json.get("rating", cupcake.rating)
-    cupcake.image=request.json.get("image", cupcake.image)
-
-    db.session.add(cupcake)
-    db.session.commit()    
-    response_json = jsonify(cupcake=cupcake.serialize())
-
-    return response_json 
+#     return (response_json, 201)  
 
 
-@app.route("/api/cupcakes/<int:id>", methods=["DELETE"])
-def delete_a_cupcake(id):
-    """Delete an existing cupcake."""
-    cupcake = Cupcake.query.get_or_404(id)
 
-    db.session.delete(cupcake)
-    db.session.commit()
+# @app.route("/api/cupcakes/<int:id>", methods=["PATCH"])
+# def patch_a_cupcake(id):
+#     """Update an existing cupcake."""
+#     cupcake = Cupcake.query.get_or_404(id)
+#     cupcake.flavor=request.json.get("flavor", cupcake.flavor)
+#     cupcake.size=request.json.get("size", cupcake.size)
+#     cupcake.rating=request.json.get("rating", cupcake.rating)
+#     cupcake.image=request.json.get("image", cupcake.image)
 
-    return (jsonify(message="Deleted cupcake"), 200)
+#     db.session.add(cupcake)
+#     db.session.commit()    
+#     response_json = jsonify(cupcake=cupcake.serialize())
+
+#     return response_json 
+
+
+# @app.route("/api/cupcakes/<int:id>", methods=["DELETE"])
+# def delete_a_cupcake(id):
+#     """Delete an existing cupcake."""
+#     cupcake = Cupcake.query.get_or_404(id)
+
+#     db.session.delete(cupcake)
+#     db.session.commit()
+
+#     return (jsonify(message="Deleted cupcake"), 200)
 
 
 
