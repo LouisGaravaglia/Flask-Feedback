@@ -1,0 +1,42 @@
+{% extends "base.html" %} {% block title %} LOGIN {% endblock %} {% block
+content %}
+
+<div class="container">
+  <h3 class="users_title">LOGIN</h3>
+
+  <form id="pet-add-form" method="POST">
+    {{ form.hidden_tag() }} 
+    
+
+    <div class="form-group">
+      {{ form.username.label }} 
+      {{ form.username(class_="form-control") }} 
+      {% if form.username.errors %}
+        <small class="form-text text-danger">{{ form.username.errors }}</small>
+      {% endif %}
+    </div>  
+
+<div class="form-group">
+      {{ form.password.label }} 
+      {{ form.password(class_="form-control") }} 
+      {% if form.password.errors %}
+        <small class="form-text text-danger">{{ form.password.errors }}</small>
+      {% endif %} 
+</div>
+<br>
+<hr>
+<p>If you have not signed up yet, please <a href="/register">register</a> here.</p>
+
+
+
+    
+
+  
+
+    <button class= "btn btn-success btn-lg"type="submit">Submit</button>
+  </form>
+</div>
+
+
+
+{% endblock %}

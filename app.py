@@ -1,11 +1,12 @@
-from flask import Flask, render_template, flash, redirect, render_template, request, jsonify
+from flask import Flask, render_template, flash, redirect, render_template, request, jsonify, session
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
 from flask_cors import CORS
 from forms import AddUserForm
+from flask_bcrypt import Bcrypt
 
 
-
+bcrypt = Bcrypt()
 
 app = Flask(__name__)
 CORS(app)
@@ -46,7 +47,8 @@ def show_home():
     """Show homepage."""
     
 
-    return redirect("/register")
+    return render_template(
+            "index.html")
         
     
 @app.route("/register", methods=["GET", "POST"])
@@ -62,9 +64,10 @@ def register_user():
         first_name = form.first_name.data
         last_name = form.last_name.data
         
-        new_user = User(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+        new_user = User.register(username, password, email, first_name, last_name)
         db.session.add(new_user)
         db.session.commit()
+        session["user_id"] = new_user.id
         flash(f"{username} is now registered!", "success")
         return redirect("/secret")
 
@@ -77,11 +80,41 @@ def register_user():
 @app.route("/secret")
 def show_secret():
     """Show the secret."""
-    
+    if "user_id" not in session:
+        flash(f"You do not have permission to view this content. Please login first", "error")
+        return redirect("/login")
+    else:
+        return render_template("secret.html")
 
-    return render_template("secret.html")
 
+@app.route("/login", methods=["GET", "POST"])
+def login_user():
+    """Show login user form; handle logging in user."""
 
+    form = AddUserForm()
+
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        
+        user = User.authenticate(username, password)
+        session["user_id"] = user.id
+        
+        if user:
+            flash(f"Welcome back {username}!", "success")
+            return redirect("/secret")
+        
+        else:
+            form.username.errors = ["Invalid Username/Password"]
+
+    return render_template("login.html", form=form)
+
+@app.route("/logout")
+def logout():
+    """Log out the user."""
+    session.pop("user_id")
+
+    return redirect("/")
 
 # @app.route("/api/cupcakes")
 # def get_all_cupcakes():

@@ -4,9 +4,40 @@
 {% block content %}
 
 <section class="pets">
-  <h1 class="home-header">AVAILABLE CUPCAKES</h1>
-  <hr />
-  <br />
+ 
+ {% if 'user_id' not in session %}
+ <div class="container mt-5">
+  <div class="row justify-content-md-center">
+    <div class="col-md-auto">
+    <a class="btn btn-lg btn-info login" href="/register">Register</a>
+    </div>
+   </div>
+  </div> 
+  <div class="container mt-2">
+  <div class="row justify-content-md-center">
+    <div class="col-md-auto">
+    <a class="btn btn-lg btn-info login" href="/login">Login</a>  
+    </div>
+   </div>
+  </div> 
+ {% endif %}
+
+  {% if 'user_id' in session %}
+   <div class="container mt-5">
+  <div class="row justify-content-md-center">
+    <div class="col-md-auto">
+    <a class="btn btn-lg btn-info login" href="/logout">Logout</a>
+        </div>
+   </div>
+  </div> 
+    <div class="container mt-2">
+  <div class="row justify-content-md-center">
+    <div class="col-md-auto">
+    <a class="btn btn-lg btn-info login" href="/secret">View Secret</a>  
+      </div>
+   </div>
+  </div> 
+ {% endif %}
 
 
 
