@@ -1,0 +1,73 @@
+.messages p {
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.messages .success {
+    background-color: rgba(108, 254, 85, 0.5);
+}
+
+.messages .error {
+    background-color: rgba(254, 85, 85, 0.5);
+}
+
+#inputs {
+    margin: 50px;
+}
+
+
+.home-header {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 4rem;
+    font-weight: 100;
+    margin: 30px;
+}
+
+ .pet-container {
+    margin: 20px 0;
+}
+
+.details {
+     font-family: 'Ubuntu', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;   
+}
+
+.pet-title {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.pet-img {
+    object-fit: cover;
+    width:250px;
+    height:250px;
+    margin-right: 60px;
+}
+
+.pet-details {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+
+
+.href{
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1rem;
+    font-weight: 200;
+    margin: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+.home-post-title{
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 2rem;
+    font-weight: 300;
+    padding-top: 20px;
+    color: black;
+    text-decoration: none;
+}

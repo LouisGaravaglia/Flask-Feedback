@@ -1,0 +1,45 @@
+{% extends "base.html" %} 
+{% block title %} HOME {% endblock %} 
+
+{% block content %}
+
+<section class="pets">
+  <h1 class="home-header">AVAILABLE CUPCAKES</h1>
+  <hr />
+  <br />
+
+    <ul id="cupcakes-list"></ul>
+
+
+  <h1 class="home-header">ADD A CUPCAKE</h1>
+  <hr />
+  <br />
+  <form id="new-cupcake-form">
+    <div>
+      <label for="form-flavor">Flavor: </label>
+      <input name="flavor" id="form-flavor" />
+    </div>
+
+    <div>
+      <label for="form-size">Size: </label>
+      <input name="size" id="form-size" />
+    </div>
+
+    <div>
+      <label for="form-rating">Rating: </label>
+      <input type="number" name="rating" id="form-rating" />
+    </div>
+
+    <div>
+      <label for="form-image">Image: </label>
+      <input name="image" id="form-image" />
+    </div>
+
+    <button>SUBMIT</button>
+  </form>
+
+
+
+</section>
+
+{% endblock %}
