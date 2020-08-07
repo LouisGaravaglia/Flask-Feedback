@@ -4,12 +4,6 @@ from wtforms.validators import InputRequired, Optional, NumberRange, URL, AnyOf,
 
 
 
-    # username - a unique primary key that is no longer than 20 characters.
-    # password - a not-nullable column that is text
-    # email - a not-nullable column that is unique and no longer than 50 characters.
-    # first_name - a not-nullable column that is no longer than 30 characters.
-    # last_name - a not-nullable column that is no longer than 30 characters.
-
 
 class AddUserForm(FlaskForm):
     """Form for registering new users."""
@@ -19,6 +13,14 @@ class AddUserForm(FlaskForm):
     email = StringField("Email", validators=[Length(min=0, max=50, message="An email can't be more than 50 characters.")])
     first_name = StringField("First Name", validators=[Length(min=0, max=30, message="A first name can't be more than 30 characters.")])
     last_name = StringField("Last Name", validators=[Length(min=0, max=30, message="A last name can't be more than 30 characters.")])
+
+
+
+
+class AddFeedbackForm(FlaskForm):
+    """Form for registering new users."""
     
+    title = StringField("Title", validators=[Length(min=0, max=100, message="Title can't be more than 100 characters.")])
+    content = StringField("Content", validators=[InputRequired()])
 
 

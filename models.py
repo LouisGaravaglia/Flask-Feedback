@@ -13,22 +13,6 @@ def connect_db(app):
     db.init_app(app)
 
 
-# class Pet(db.Model):
-#     """Creating a Model for our Pet."""
-
-#     __tablename__ = "pets"
-
-#     id = db.Column(db.Integer,
-#                    primary_key=True,
-#                    autoincrement=True)
-#     name = db.Column(db.Text,
-#                      nullable=False, )
-#     species = db.Column(db.Text, nullable=True)
-#     photo = db.Column(db.Text)
-#     age = db.Column(db.Integer)
-#     notes = db.Column(db.Text)
-#     available = db.Column(db.Boolean, nullable=False, default=True)
-
 class User(db.Model):
     """Creating a Model for our User."""
 
@@ -40,6 +24,7 @@ class User(db.Model):
     email = db.Column(db.Text, nullable=False, unique=True)
     first_name = db.Column(db.Text, nullable=False)
     last_name = db.Column(db.Text, nullable=False)
+    feedback = db.relationship("Feedback", backref="user", cascade="all, delete-orphan")
 
     @classmethod
     def register(cls, username, pwd, email, first_name, last_name):
@@ -70,3 +55,18 @@ class User(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name
         }
+        
+        
+
+
+
+
+class Feedback(db.Model):
+    """Creating a Model for our User."""
+
+    __tablename__ = "feedbacks"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    username = db.Column(db.Text, db.ForeignKey('users.username'), nullable=False)

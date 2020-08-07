@@ -1,8 +1,8 @@
 from flask import Flask, render_template, flash, redirect, render_template, request, jsonify, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, Feedback
 from flask_cors import CORS
-from forms import AddUserForm
+from forms import AddUserForm, AddFeedbackForm
 from flask_bcrypt import Bcrypt
 
 
@@ -62,16 +62,7 @@ def register_user():
         return render_template(
             "register.html", form=form)
 
-    
-@app.route("/users/<username>")
-def show_secret(username):
-    """Show the users info."""
-    user = User.query.filter_by(username=username).first()
-    if session["username"] != username:
-        flash("You do not have permission to view this content.")
-        return redirect("/")
-    else:
-        return render_template("user.html", user=user)
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -97,9 +88,58 @@ def login_user():
 
     return render_template("login.html", form=form)
 
+
+    
+@app.route("/users/<username>")
+def show_secret(username):
+    """Show the users info."""
+    user = User.query.filter_by(username=username).first()
+    if session["username"] != username:
+        flash("You do not have permission to view this content.")
+        return redirect("/")
+    else:
+        return render_template("user.html", user=user)
+    
+    
+    
 @app.route("/logout")
 def logout():
     """Log out the user."""
     session.pop("username")
 
     return redirect("/")
+
+
+# GET /users/<username>/feedback/add
+#     Display a form to add feedback Make sure that only 
+#     the user who is logged in can see this form
+# POST /users/<username>/feedback/add
+#     Add a new piece of feedback and redirect to /users/<username> — 
+#     Make sure that only the user who is logged in can successfully add feedback
+
+@app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
+def show_add_feedback(username):
+    """Show a form to add feedback. Handle the posting of that feedback."""
+
+    if "username" not in session or username != session['username']:
+        return redirect("/")
+    else:
+        form = AddFeedbackForm()
+        
+    
+    
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+        
+        
+        post = Feedback(title=title, content=content, username=username)
+        db.session.add(post)
+        db.session.commit()
+        flash(f"Feedback Posted!", "success")
+        return redirect(f"/users/{username}")
+        
+    else:
+    
+        return render_template(
+            "add_feedback.html", form=form)
