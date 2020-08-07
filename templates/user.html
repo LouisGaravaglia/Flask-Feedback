@@ -2,12 +2,10 @@
 {% block title %} USER {% endblock %} 
 
 {% block content %}
-  <h1 class="home-header">MY PROFILE</h1>
-  <hr />
-  <br />
+  <h1 class="display-4 mt-5 ml-5">MY PROFILE</h1>
 
 
-<div class="containter mx-5">
+<div class="containter mx-5 mt-5">
 <ul class="list-group">
   <li class="list-group-item list-group-item-secondary"><b>USERNAME:</b> {{user.username}}</li>
   <li class="list-group-item list-group-item-light"><b>FIRST NAME:</b> {{user.first_name}}</li>
@@ -16,6 +14,22 @@
 
 </ul>
 </div>
+<h1 class="display-4 mt-5 ml-5">MY FEEDBACK</h1>
+{% for feedback in feedbacks%}
+<div class="containter mx-5 mt-5">
+<div class="list-group">
 
+  <a href="#" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{feedback.title}}</h5>
+    
+    </div>
+    <p class="mb-1">{{feedback.content}}</p>
+ 
+  </a>
+  
+</div>
+</div>
+{% endfor %}
 
 {% endblock %}

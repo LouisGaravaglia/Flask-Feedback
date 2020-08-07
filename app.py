@@ -93,12 +93,14 @@ def login_user():
 @app.route("/users/<username>")
 def show_secret(username):
     """Show the users info."""
-    user = User.query.filter_by(username=username).first()
+    
     if session["username"] != username:
         flash("You do not have permission to view this content.")
         return redirect("/")
     else:
-        return render_template("user.html", user=user)
+        user = User.query.filter_by(username=username).first()
+        feedbacks = Feedback.query.filter_by(username=username).all()
+        return render_template("user.html", user=user, feedbacks=feedbacks)
     
     
     
