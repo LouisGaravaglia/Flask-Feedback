@@ -10,7 +10,7 @@ from forms import AddUserForm
 app = Flask(__name__)
 CORS(app)
 app.config["SECRET_KEY"] = "oh-so-secret"
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres:///cupcakes"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgres:///flask_feedback"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
 # app.config["TESTING"] = True
@@ -41,12 +41,12 @@ connect_db(app)
 #     Return the text “You made it!” (don’t worry, we’ll get rid of this soon) 
     
     
-# @app.route("/")
-# def show_home():
-#     """Show homepage."""
+@app.route("/")
+def show_home():
+    """Show homepage."""
     
 
-#     return render_template("index.html", cupcakes=cupcakes)
+    return redirect("/register")
         
     
 @app.route("/register", methods=["GET", "POST"])
@@ -66,7 +66,7 @@ def register_user():
         db.session.add(new_user)
         db.session.commit()
         flash(f"{username} is now registered!", "success")
-        return redirect("/register")
+        return redirect("/secret")
 
     else:
 
@@ -74,7 +74,12 @@ def register_user():
             "register.html", form=form)
 
     
+@app.route("/secret")
+def show_secret():
+    """Show the secret."""
+    
 
+    return render_template("secret.html")
 
 
 
