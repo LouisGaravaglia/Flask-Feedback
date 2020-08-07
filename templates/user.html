@@ -14,9 +14,9 @@
 
 </ul>
 </div>
-<h1 class="display-4 mt-5 ml-5">MY FEEDBACK</h1>
+<h1 class="display-4 my-5 ml-5">MY FEEDBACK</h1>
 {% for feedback in feedbacks%}
-<div class="containter mx-5 mt-5">
+<div class="containter mx-5 mb-3">
 <div class="list-group">
 
   <a href="/feedback/{{feedback.id}}/update" class="list-group-item list-group-item-action">
@@ -25,6 +25,7 @@
       <small class="text-muted">EDIT</small>
     </div>
     <p class="mb-1">{{feedback.content}}</p>
+    <a href="/feedback/{{feedback.id}}/delete" class="badge badge-danger">DELETE</a>
  
   </a>
   

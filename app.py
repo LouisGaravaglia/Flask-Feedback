@@ -153,10 +153,15 @@ def show_add_feedback(username):
 
 @app.route("/feedback/<int:id>/update", methods=["GET", "POST"])
 def edit_feedback(id):
-    """Edit the pet listing."""
-    feedback = Feedback.query.get_or_404(id)
-    form = AddFeedbackForm(obj=feedback)
-
+    """Edit the feedback."""
+    
+    if "username" not in session or username != session['username']:
+        flash("You do not have permission to view this content.")
+        return redirect("/")
+    else:
+        feedback = Feedback.query.get_or_404(id)
+        form = AddFeedbackForm(obj=feedback)
+    
     if form.validate_on_submit():
         feedback.title = form.title.data
         feedback.content = form.content.data
@@ -172,3 +177,20 @@ def edit_feedback(id):
 
         return render_template(
             "edit_feedback.html", form=form)
+
+
+@app.route("/feedback/<int:id>/delete", methods=["GET", "POST"])
+def delete_feedback(id):
+    """Delete the feedback."""
+ 
+    if "username" not in session:
+        flash("You do not have permission to view this content.")
+        return redirect("/")
+    else:
+        feedback = Feedback.query.get_or_404(id)
+        db.session.delete(feedback)
+        db.session.commit()
+        flash(f"Deleted Feedback", "success")
+        return redirect(f"/users/{feedback.username}")
+        
+    
