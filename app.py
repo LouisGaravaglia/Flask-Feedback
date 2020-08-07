@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, render_template, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, Pet
+from models import db, connect_db, User
 from flask_cors import CORS
 from forms import AddUserForm
 
@@ -56,17 +56,16 @@ def register_user():
     form = AddUserForm()
 
     if form.validate_on_submit():
-        name = form.name.data
-        species = form.species.data
-        photo = form.photo.data
-        age = form.age.data
-        notes = form.notes.data
-        available = form.available.data
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
         
-        new_pet = Pet(name=name, species=species, photo=photo, age=age, notes=notes, available=available)
-        db.session.add(new_pet)
+        new_user = User(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+        db.session.add(new_user)
         db.session.commit()
-        flash(f"Added {name} the {species}", "success")
+        flash(f"{username} is now registered!", "success")
         return redirect("/register")
 
     else:
