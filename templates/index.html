@@ -5,7 +5,7 @@
 
 <section class="pets">
  
- {% if 'user_id' not in session %}
+ {% if 'username' not in session %}
  <div class="container mt-5">
   <div class="row justify-content-md-center">
     <div class="col-md-auto">
@@ -22,7 +22,7 @@
   </div> 
  {% endif %}
 
-  {% if 'user_id' in session %}
+  {% if 'username' in session %}
    <div class="container mt-5">
   <div class="row justify-content-md-center">
     <div class="col-md-auto">
@@ -33,7 +33,7 @@
     <div class="container mt-2">
   <div class="row justify-content-md-center">
     <div class="col-md-auto">
-    <a class="btn btn-lg btn-info login" href="/secret">View Secret</a>  
+    <a class="btn btn-lg btn-info login" href="/users/{{user.username}}">View Profile</a>  
       </div>
    </div>
   </div> 
