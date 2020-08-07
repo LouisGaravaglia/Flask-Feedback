@@ -2,13 +2,13 @@
 content %}
 
 <div class="container">
-  <h3 class="users_title">ADD FEEDBACK</h3>
+  <h1 class="display-4 mt-5">ADD FEEDBACK</h1>
 
   <form id="pet-add-form" method="POST">
     {{ form.hidden_tag() }} 
     
 
-    <div class="form-group">
+    <div class="form-group mt-5">
       {{ form.title.label }} 
       {{ form.title(class_="form-control") }} 
       {% if form.title.errors %}
