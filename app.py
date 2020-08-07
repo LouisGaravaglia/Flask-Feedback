@@ -112,18 +112,13 @@ def logout():
     return redirect("/")
 
 
-# GET /users/<username>/feedback/add
-#     Display a form to add feedback Make sure that only 
-#     the user who is logged in can see this form
-# POST /users/<username>/feedback/add
-#     Add a new piece of feedback and redirect to /users/<username> — 
-#     Make sure that only the user who is logged in can successfully add feedback
 
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def show_add_feedback(username):
     """Show a form to add feedback. Handle the posting of that feedback."""
 
     if "username" not in session or username != session['username']:
+        flash("You do not have permission to view this content.")
         return redirect("/")
     else:
         form = AddFeedbackForm()
@@ -145,3 +140,35 @@ def show_add_feedback(username):
     
         return render_template(
             "add_feedback.html", form=form)
+
+# GET /feedback/<feedback-id>/update
+#     Display a form to edit feedback — **Make sure that only the user who 
+#     has written that feedback can see this form **
+# POST /feedback/<feedback-id>/update
+#     Update a specific piece of feedback and redirect to /users/<username> — 
+#     Make sure that only the user who has written that feedback can update it
+# POST /feedback/<feedback-id>/delete
+#     Delete a specific piece of feedback and redirect to /users/<username> — 
+#     Make sure that only the user who has written that feedback can delete it
+
+@app.route("/feedback/<int:id>/update", methods=["GET", "POST"])
+def edit_feedback(id):
+    """Edit the pet listing."""
+    feedback = Feedback.query.get_or_404(id)
+    form = AddFeedbackForm(obj=feedback)
+
+    if form.validate_on_submit():
+        feedback.title = form.title.data
+        feedback.content = form.content.data
+        # feedback.title=request.get("title", feedback.title)
+        # feedback.content=request.get("content", feedback.content)
+
+        
+        db.session.commit()
+        flash(f"Updated Feedback", "success")
+        return redirect(f"/users/{feedback.username}")
+
+    else:
+
+        return render_template(
+            "edit_feedback.html", form=form)
