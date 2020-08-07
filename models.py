@@ -10,28 +10,30 @@ def connect_db(app):
     db.init_app(app)
 
 
-DEFAULT_IMAGE = "https://tinyurl.com/demo-cupcake"
+class User(db.Model):
+    """Creating a Model for our User."""
 
-class Cupcake(db.Model):
-    """Creating a Model for our Cupcake."""
-
-    __tablename__ = "cupcakes"
+    __tablename__ = "users"
 
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
-    flavor = db.Column(db.Text,
-                     nullable=False)
-    size = db.Column(db.Text, nullable=False)
-    rating = db.Column(db.Float, nullable=False)
-    image = db.Column(db.Text, nullable=False, default=DEFAULT_IMAGE)
+    username = db.Column(db.Text,
+                     nullable=False, length=20)
+    password = db.Column(db.Text, nullable=False)
+    email = db.Column(db.Text, nullable=False, length=50)
+    first_name = db.Column(db.Text,
+                     nullable=False, length=30)
+    last_name = db.Column(db.Text,
+                     nullable=False, length=30)
 
     
     def serialize(self):
         return {
             'id': self.id,
-            'flavor': self.flavor,
-            'size': self.size,
-            'rating': self.rating,
-            'image': self.image
+            'username': self.username,
+            'password': self.password,
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name
         }
