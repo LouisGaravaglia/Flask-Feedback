@@ -98,10 +98,11 @@ def login_user():
         password = form.password.data
         
         user = User.authenticate(username, password)
-        session["user_id"] = user.id
+        
         
         if user:
             flash(f"Welcome back {username}!", "success")
+            session["user_id"] = user.id
             return redirect("/secret")
         
         else:
